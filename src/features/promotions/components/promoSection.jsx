@@ -176,7 +176,7 @@ export default function HeroBanner() {
 
   return (
     <div 
-      className="relative w-screen h-screen max-h-[900px] overflow-hidden -mx-[calc((100vw-100%)/2)] mt-16"
+      className="relative w-[80%] mx-auto h-screen max-h-[900px] overflow-hidden mt-16"
       ref={sliderRef}
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovered(true)}

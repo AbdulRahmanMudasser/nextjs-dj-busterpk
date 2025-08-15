@@ -3,6 +3,43 @@
 import { useState } from 'react';
 import { Search, Filter, Eye, Package, Truck, CheckCircle, AlertCircle, MessageCircle } from 'lucide-react';
 
+// This wrapper simulates the parent SellerLayout with working setIsOpen
+const OrdersPageWrapper = () => {
+  const [isOpen, setIsOpen] = useState(true);
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'row' }}>
+      {/* Example sidebar placeholder */}
+      <aside
+        style={{
+          width: isOpen ? '200px' : '60px',
+          transition: 'width 0.3s',
+          backgroundColor: '#f9fafb',
+          borderRight: '1px solid #e5e7eb',
+          padding: '10px'
+        }}
+      >
+        <button
+          onClick={() => setIsOpen(prev => !prev)}
+          style={{
+            padding: '8px 12px',
+            background: '#3b82f6',
+            color: 'white',
+            borderRadius: '6px',
+            border: 'none',
+            cursor: 'pointer'
+          }}
+        >
+          {isOpen ? 'Close' : 'Open'}
+        </button>
+      </aside>
+      <main style={{ flex: 1, padding: '20px' }}>
+        <OrdersPage />
+      </main>
+    </div>
+  );
+};
+
 const OrdersPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
@@ -219,4 +256,4 @@ const OrdersPage = () => {
   );
 };
 
-export default OrdersPage;
+export default OrdersPageWrapper;

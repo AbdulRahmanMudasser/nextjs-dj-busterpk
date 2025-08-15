@@ -1,7 +1,15 @@
-// pages/dashboard.jsx
 'use client';
 import React from 'react';
-import { TrendingUp, TrendingDown, Package, ShoppingCart, DollarSign, Users, Star, AlertCircle } from 'lucide-react';
+import {
+  TrendingUp,
+  TrendingDown,
+  Package,
+  ShoppingCart,
+  DollarSign,
+  Users,
+  Star,
+  AlertCircle
+} from 'lucide-react';
 
 const stats = [
   { name: 'Total Revenue', value: '$84,532', change: '+12.5%', trend: 'up', icon: DollarSign },
@@ -50,7 +58,11 @@ export default function Dashboard() {
                     ) : (
                       <TrendingDown className="h-4 w-4 text-red-500 mr-1" />
                     )}
-                    <span className={`text-sm font-medium ${stat.trend === 'up' ? 'text-green-600' : 'text-red-600'}`}>
+                    <span
+                      className={`text-sm font-medium ${
+                        stat.trend === 'up' ? 'text-green-600' : 'text-red-600'
+                      }`}
+                    >
                       {stat.change}
                     </span>
                   </div>
@@ -94,11 +106,15 @@ export default function Dashboard() {
                       {order.amount}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                        order.status === 'Processing' ? 'bg-yellow-100 text-yellow-800' :
-                        order.status === 'Shipped' ? 'bg-blue-100 text-blue-800' :
-                        'bg-green-100 text-green-800'
-                      }`}>
+                      <span
+                        className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                          order.status === 'Processing'
+                            ? 'bg-yellow-100 text-yellow-800'
+                            : order.status === 'Shipped'
+                            ? 'bg-blue-100 text-blue-800'
+                            : 'bg-green-100 text-green-800'
+                        }`}
+                      >
                         {order.status}
                       </span>
                     </td>
@@ -116,16 +132,25 @@ export default function Dashboard() {
           </div>
           <div className="p-6 space-y-4">
             {alerts.map((alert, index) => (
-              <div key={index} className={`flex items-start space-x-3 p-3 rounded-lg ${
-                alert.type === 'warning' ? 'bg-amber-50 border border-amber-200' :
-                alert.type === 'info' ? 'bg-blue-50 border border-blue-200' :
-                'bg-green-50 border border-green-200'
-              }`}>
-                <AlertCircle className={`h-5 w-5 mt-0.5 ${
-                  alert.type === 'warning' ? 'text-amber-600' :
-                  alert.type === 'info' ? 'text-blue-600' :
-                  'text-green-600'
-                }`} />
+              <div
+                key={index}
+                className={`flex items-start space-x-3 p-3 rounded-lg ${
+                  alert.type === 'warning'
+                    ? 'bg-amber-50 border border-amber-200'
+                    : alert.type === 'info'
+                    ? 'bg-blue-50 border border-blue-200'
+                    : 'bg-green-50 border border-green-200'
+                }`}
+              >
+                <AlertCircle
+                  className={`h-5 w-5 mt-0.5 ${
+                    alert.type === 'warning'
+                      ? 'text-amber-600'
+                      : alert.type === 'info'
+                      ? 'text-blue-600'
+                      : 'text-green-600'
+                  }`}
+                />
                 <p className="text-sm text-gray-900">{alert.message}</p>
               </div>
             ))}
