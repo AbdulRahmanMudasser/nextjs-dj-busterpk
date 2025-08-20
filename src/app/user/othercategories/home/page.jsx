@@ -1,177 +1,95 @@
 'use client';
 
 import { useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { 
   SlidersHorizontal, 
   X, 
   Grid, 
   List, 
-  Smartphone, 
-  Shirt, 
-  Home, 
-  BookOpen,
+  Home,
   Star,
   ShoppingCart,
   ChevronDown,
-  ChevronUp,
   Search,
   Filter,
   ArrowRight
 } from "lucide-react";
 
-const CategoryPage = () => {
+export default function HomeKitchenPage() {
   const router = useRouter()
-  const { category = "electronics" } = useParams()
   const [showFilters, setShowFilters] = useState(false)
   const [viewMode, setViewMode] = useState("grid")
-  const [priceRange, setPriceRange] = useState([0, 2000])
+  const [priceRange, setPriceRange] = useState([0, 1000])
   const [selectedBrands, setSelectedBrands] = useState([])
   const [selectedFeatures, setSelectedFeatures] = useState([])
   const [sortBy, setSortBy] = useState("popular")
   const [searchQuery, setSearchQuery] = useState("")
 
-  const categoryConfig = {
-    electronics: {
-      name: "Electronics",
-      icon: Smartphone,
-      color: "bg-blue-600",
-      gradient: "from-blue-500 to-blue-700",
-      description: "Latest gadgets, smartphones, laptops, and tech accessories",
-      filters: {
-        brands: ["Apple", "Samsung", "Google", "OnePlus", "Sony", "LG"],
-        features: ["5G Ready", "Wireless Charging", "Water Resistant", "Fast Charging"]
-      }
-    },
-    fashion: {
-      name: "Fashion",
-      icon: Shirt,
-      color: "bg-pink-600",
-      gradient: "from-pink-500 to-pink-700",
-      description: "Trendy clothing, accessories, and footwear for all occasions",
-      filters: {
-        brands: ["Nike", "Adidas", "Puma", "H&M", "Zara", "Uniqlo"],
-        features: ["Organic Cotton", "Sustainable", "Limited Edition", "Quick Dry"]
-      }
-    },
-    home: {
-      name: "Home & Kitchen",
-      icon: Home,
-      color: "bg-green-600",
-      gradient: "from-green-500 to-green-700",
-      description: "Essential home appliances, kitchen tools, and home decor",
-      filters: {
-        brands: ["Philips", "Breville", "KitchenAid", "Dyson", "IKEA", "Williams Sonoma"],
-        features: ["Smart Home", "Energy Efficient", "Dishwasher Safe", "Non-Stick"]
-      }
-    },
-    books: {
-      name: "Books & Stationery",
-      icon: BookOpen,
-      color: "bg-purple-600",
-      gradient: "from-purple-500 to-purple-700",
-      description: "Books, educational materials, and office supplies",
-      filters: {
-        brands: ["Penguin", "Harper Collins", "McGraw Hill", "Moleskine", "Staedtler"],
-        features: ["Bestseller", "Educational", "Reference", "Digital Copy Included"]
-      }
+  const config = {
+    name: "Home & Kitchen",
+    icon: Home,
+    color: "bg-green-600",
+    gradient: "from-green-500 to-green-700",
+    description: "Essential home appliances, kitchen tools, and home decor",
+    filters: {
+      brands: ["Philips", "Breville", "KitchenAid", "Dyson", "IKEA", "Williams Sonoma"],
+      features: ["Smart Home", "Energy Efficient", "Dishwasher Safe", "Non-Stick"]
     }
   }
 
-  const categoryProducts = {
-    electronics: Array(12).fill().map((_, i) => ({
-      id: `elec-${i}`,
-      name: i % 3 === 0 ? "iPhone 15 Pro Max 256GB" : 
-            i % 3 === 1 ? "Samsung Galaxy S24 Ultra" : "Google Pixel 8 Pro",
-      price: i % 3 === 0 ? 1199.99 : i % 3 === 1 ? 1299.99 : 999.99,
-      originalPrice: i % 3 === 0 ? 1299.99 : i % 3 === 1 ? 1399.99 : 1099.99,
-      rating: 4.5 + (i % 5 * 0.1),
-      reviewCount: 2847 - (i * 100),
-      image: "/electronics.jpg",
-      category: "Electronics",
-      isOnSale: i % 2 === 0,
-      inStock: true,
-      brand: i % 3 === 0 ? "Apple" : i % 3 === 1 ? "Samsung" : "Google"
-    })),
-    fashion: Array(12).fill().map((_, i) => ({
-      id: `fash-${i}`,
-      name: i % 3 === 0 ? "Premium Cotton T-Shirt" : 
-            i % 3 === 1 ? "Designer Jeans" : "Winter Jacket",
-      price: i % 3 === 0 ? 29.99 : i % 3 === 1 ? 89.99 : 149.99,
-      originalPrice: i % 3 === 0 ? 39.99 : i % 3 === 1 ? 99.99 : 179.99,
-      rating: 4.2 + (i % 5 * 0.1),
-      reviewCount: 1203 - (i * 50),
-      image: "/fashion.jpg",
-      category: "Fashion",
-      isOnSale: i % 2 === 0,
-      inStock: true,
-      brand: i % 3 === 0 ? "Nike" : i % 3 === 1 ? "Adidas" : "Puma"
-    })),
-    home: Array(12).fill().map((_, i) => ({
-      id: `home-${i}`,
-      name: i % 3 === 0 ? "Smart Coffee Maker" : 
-            i % 3 === 1 ? "Air Fryer Oven" : "Robot Vacuum",
-      price: i % 3 === 0 ? 149.99 : i % 3 === 1 ? 199.99 : 299.99,
-      originalPrice: i % 3 === 0 ? 179.99 : i % 3 === 1 ? 229.99 : 349.99,
-      rating: 4.6 + (i % 5 * 0.1),
-      reviewCount: 856 - (i * 30),
-      image: "/home.jpg",
-      category: "Home & Kitchen",
-      isOnSale: i % 2 === 0,
-      inStock: true,
-      brand: i % 3 === 0 ? "Breville" : i % 3 === 1 ? "Philips" : "Dyson"
-    })),
-    books: Array(12).fill().map((_, i) => ({
-      id: `book-${i}`,
-      name: i % 3 === 0 ? "The Art of Programming" : 
-            i % 3 === 1 ? "Design Patterns" : "Clean Code",
-      price: i % 3 === 0 ? 49.99 : i % 3 === 1 ? 59.99 : 39.99,
-      originalPrice: i % 3 === 0 ? 59.99 : i % 3 === 1 ? 69.99 : 49.99,
-      rating: 4.8 + (i % 5 * 0.1),
-      reviewCount: 445 - (i * 20),
-      image: "/books.jpg",
-      category: "Books & Stationery",
-      isOnSale: i % 2 === 0,
-      inStock: true,
-      brand: i % 3 === 0 ? "Penguin" : i % 3 === 1 ? "O'Reilly" : "No Starch"
-    }))
-  }
-
-  const config = categoryConfig[category] || categoryConfig.electronics
-  const Icon = config.icon
-  let products = categoryProducts[category] || []
+  const products = Array(12).fill().map((_, i) => ({
+    id: `home-${i}`,
+    name: i % 3 === 0 ? "Smart Coffee Maker" : 
+          i % 3 === 1 ? "Air Fryer Oven" : "Robot Vacuum",
+    price: i % 3 === 0 ? 149.99 : i % 3 === 1 ? 199.99 : 299.99,
+    originalPrice: i % 3 === 0 ? 179.99 : i % 3 === 1 ? 229.99 : 349.99,
+    rating: 4.6 + (i % 5 * 0.1),
+    reviewCount: 856 - (i * 30),
+    image: "/home.jpg",
+    category: "Home & Kitchen",
+    isOnSale: i % 2 === 0,
+    inStock: true,
+    brand: i % 3 === 0 ? "Breville" : i % 3 === 1 ? "Philips" : "Dyson",
+    feature: i % 4 === 0 ? "Smart Home" : 
+            i % 4 === 1 ? "Energy Efficient" : 
+            i % 4 === 2 ? "Dishwasher Safe" : "Non-Stick"
+  }))
 
   // Apply filters
+  let filteredProducts = [...products]
   if (selectedBrands.length > 0) {
-    products = products.filter(p => selectedBrands.includes(p.brand))
+    filteredProducts = filteredProducts.filter(p => selectedBrands.includes(p.brand))
+  }
+  if (selectedFeatures.length > 0) {
+    filteredProducts = filteredProducts.filter(p => selectedFeatures.includes(p.feature))
   }
   if (searchQuery) {
-    products = products.filter(p => 
+    filteredProducts = filteredProducts.filter(p => 
       p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       p.brand.toLowerCase().includes(searchQuery.toLowerCase())
     )
   }
-  products = products.filter(p => 
+  filteredProducts = filteredProducts.filter(p => 
     p.price >= priceRange[0] && p.price <= priceRange[1]
   )
 
   // Apply sorting
   switch (sortBy) {
     case "price-low":
-      products.sort((a, b) => a.price - b.price)
+      filteredProducts.sort((a, b) => a.price - b.price)
       break
     case "price-high":
-      products.sort((a, b) => b.price - a.price)
+      filteredProducts.sort((a, b) => b.price - a.price)
       break
     case "rating":
-      products.sort((a, b) => b.rating - a.rating)
+      filteredProducts.sort((a, b) => b.rating - a.rating)
       break
     case "newest":
-      products.sort((a, b) => b.reviewCount - a.reviewCount)
+      filteredProducts.sort((a, b) => b.reviewCount - a.reviewCount)
       break
     default:
-      // Most popular (default)
-      products.sort((a, b) => b.reviewCount - a.reviewCount)
+      filteredProducts.sort((a, b) => b.reviewCount - a.reviewCount)
   }
 
   const toggleBrand = (brand) => {
@@ -189,7 +107,7 @@ const CategoryPage = () => {
   const clearFilters = () => {
     setSelectedBrands([])
     setSelectedFeatures([])
-    setPriceRange([0, 2000])
+    setPriceRange([0, 1000])
     setSearchQuery("")
   }
 
@@ -239,37 +157,15 @@ const CategoryPage = () => {
             )}
           </div>
           <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">
-            {product.category}
+            {product.feature}
           </span>
         </div>
       </div>
     </div>
   )
 
-  const CategorySelector = () => (
-    <div className="flex overflow-x-auto pb-2 gap-2 mb-6">
-      {Object.entries(categoryConfig).map(([key, cat]) => (
-        <button
-          key={key}
-          onClick={() => router.push(`./othercategories/${key}`)}
-          className={`flex flex-col items-center justify-center px-6 py-3 rounded-xl min-w-[120px] transition-all ${
-            category === key 
-              ? `${cat.color} text-white shadow-md`
-              : "bg-white text-gray-700 hover:bg-gray-50 border border-gray-200"
-          }`}
-        >
-          <cat.icon className="w-6 h-6 mb-2" />
-          <span className="text-sm font-medium">{cat.name}</span>
-        </button>
-      ))}
-    </div>
-  )
-
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      {/* Category Selector */}
-      <CategorySelector />
-
       {/* Category Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-8">
         <div>
@@ -277,7 +173,7 @@ const CategoryPage = () => {
           <p className="text-gray-600 mt-2">{config.description}</p>
         </div>
         <div className="text-sm text-gray-500">
-          Showing <span className="font-medium text-gray-900">{products.length}</span> of {categoryProducts[category].length} products
+          Showing <span className="font-medium text-gray-900">{filteredProducts.length}</span> of {products.length} products
         </div>
       </div>
 
@@ -338,7 +234,7 @@ const CategoryPage = () => {
       </div>
 
       {/* Active Filters */}
-      {(selectedBrands.length > 0 || selectedFeatures.length > 0 || searchQuery || priceRange[1] < 2000) && (
+      {(selectedBrands.length > 0 || selectedFeatures.length > 0 || searchQuery || priceRange[1] < 1000) && (
         <div className="flex flex-wrap items-center gap-3 mb-6">
           <span className="text-sm text-gray-500">Filters:</span>
           {searchQuery && (
@@ -350,9 +246,9 @@ const CategoryPage = () => {
               <X size={12} />
             </span>
           )}
-          {priceRange[1] < 2000 && (
+          {priceRange[1] < 1000 && (
             <span 
-              onClick={() => setPriceRange([0, 2000])}
+              onClick={() => setPriceRange([0, 1000])}
               className="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-800 text-sm px-3 py-1 rounded-full cursor-pointer transition-colors"
             >
               Price: ${priceRange[0]} - ${priceRange[1]}
@@ -409,7 +305,7 @@ const CategoryPage = () => {
                 <input
                   type="range"
                   min="0"
-                  max="2000"
+                  max="1000"
                   step="10"
                   value={priceRange[1]}
                   onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
@@ -462,7 +358,7 @@ const CategoryPage = () => {
 
         {/* Products */}
         <div className="flex-1">
-          {products.length === 0 ? (
+          {filteredProducts.length === 0 ? (
             <div className="bg-white rounded-xl p-12 text-center border border-gray-200">
               <Search className="mx-auto h-12 w-12 text-gray-400" />
               <h3 className="mt-4 text-lg font-medium text-gray-900">No products found</h3>
@@ -482,7 +378,7 @@ const CategoryPage = () => {
                 ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' 
                 : 'space-y-4'
             } gap-6`}>
-              {products.map((product) => (
+              {filteredProducts.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
             </div>
@@ -492,5 +388,3 @@ const CategoryPage = () => {
     </div>
   )
 }
-
-export default CategoryPage
