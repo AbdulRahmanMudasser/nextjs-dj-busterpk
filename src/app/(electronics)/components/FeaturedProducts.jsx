@@ -122,7 +122,7 @@ export default function FeaturedProducts() {
                   <span className="text-sm line-through text-gray-400">{product.oldPrice}</span>
                 </div>
 
-                <button className="bg-[#ff0e1e] hover:bg-[#ff0e1ea8] text-white text-sm py-2 rounded-md w-full transition">
+                <button className="bg-blue-600 hover:bg-blue-800 text-white text-sm py-2 rounded-md w-full transition">
                   Add to Cart
                 </button>
               </div>

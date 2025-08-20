@@ -1,14 +1,19 @@
 "use client"
 import { useState } from "react"
-import { 
-  User, 
+import {
+  User,
   CreditCard,
   Bell,
   Shield,
   Star,
   Edit,
   Plus,
-  Trash2
+  Trash2,
+  MapPin,
+  CheckCircle,
+  Download,
+  Key,
+  Lock
 } from "lucide-react"
 
 // Mock user data
@@ -86,200 +91,288 @@ export default function Profile() {
   }
 
   const ProfileStats = () => (
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(150px,1fr))", gap: "1rem", marginBottom: "1.5rem" }}>
-      <div style={{ textAlign: "center", padding: "1rem", border: "1px solid #ddd", borderRadius: "8px" }}>
-        <div style={{ fontSize: "1.5rem", fontWeight: "bold", color: "blue" }}>{userData.totalOrders}</div>
-        <div style={{ fontSize: "0.9rem", color: "#666" }}>Total Orders</div>
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      <div className="bg-white rounded-xl p-4 text-center border border-blue-100 shadow-sm">
+        <div className="text-2xl font-bold text-blue-900">{userData.totalOrders}</div>
+        <div className="text-sm text-blue-600">Total Orders</div>
       </div>
-      <div style={{ textAlign: "center", padding: "1rem", border: "1px solid #ddd", borderRadius: "8px" }}>
-        <div style={{ fontSize: "1.5rem", fontWeight: "bold", color: "blue" }}>${userData.totalSpent.toFixed(2)}</div>
-        <div style={{ fontSize: "0.9rem", color: "#666" }}>Total Spent</div>
+      <div className="bg-white rounded-xl p-4 text-center border border-blue-100 shadow-sm">
+        <div className="text-2xl font-bold text-blue-900">${userData.totalSpent.toFixed(2)}</div>
+        <div className="text-sm text-blue-600">Total Spent</div>
       </div>
-      <div style={{ textAlign: "center", padding: "1rem", border: "1px solid #ddd", borderRadius: "8px" }}>
-        <div style={{ fontSize: "1.5rem", fontWeight: "bold", color: "orange" }}>{userData.loyaltyPoints}</div>
-        <div style={{ fontSize: "0.9rem", color: "#666" }}>Loyalty Points</div>
+      <div className="bg-white rounded-xl p-4 text-center border border-blue-100 shadow-sm">
+        <div className="text-2xl font-bold text-orange-600">{userData.loyaltyPoints}</div>
+        <div className="text-sm text-blue-600">Loyalty Points</div>
       </div>
-      <div style={{ textAlign: "center", padding: "1rem", border: "1px solid #ddd", borderRadius: "8px" }}>
-        <div style={{ fontSize: "1.5rem", fontWeight: "bold", color: "green" }}>4.8</div>
-        <div style={{ fontSize: "0.9rem", color: "#666" }}>Avg. Rating</div>
+      <div className="bg-white rounded-xl p-4 text-center border border-blue-100 shadow-sm">
+        <div className="text-2xl font-bold text-green-600">4.8</div>
+        <div className="text-sm text-blue-600">Avg. Rating</div>
       </div>
     </div>
   )
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
-      {/* Header */}
-      <div style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: "1rem" }}>
-        <div style={{ height: "80px", width: "80px", borderRadius: "50%", background: "linear-gradient(to right, blue, orange)", display: "flex", alignItems: "center", justifyContent: "center", color: "white", fontWeight: "bold", fontSize: "1.2rem" }}>
-          {userData.name.split(' ').map(n => n[0]).join('')}
-        </div>
-        <div style={{ flex: 1 }}>
-          <h1 style={{ fontSize: "1.75rem", fontWeight: "bold" }}>{userData.name}</h1>
-          <p style={{ color: "#666" }}>Member since {new Date(userData.memberSince).toLocaleDateString()}</p>
-          <span style={{ display: "inline-flex", alignItems: "center", background: "linear-gradient(to right, blue, orange)", color: "white", padding: "0.25rem 0.5rem", borderRadius: "6px", fontSize: "0.85rem", marginTop: "0.5rem" }}>
-            <Star size={14} style={{ marginRight: "4px" }} />
-            VIP Customer
-          </span>
-        </div>
-        <button style={{ border: "1px solid #ccc", padding: "0.5rem 1rem", borderRadius: "6px", background: "white", cursor: "pointer" }}>
-          <Edit size={16} style={{ marginRight: "4px", display: "inline" }} />
-          Edit Profile Picture
-        </button>
-      </div>
-
-      <ProfileStats />
-
-      {/* Tabs */}
-      <div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", borderBottom: "1px solid #ddd", marginBottom: "1rem" }}>
-          {["personal","addresses","payments","settings"].map(tab => (
-            <button 
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              style={{
-                padding: "0.75rem",
-                borderBottom: activeTab === tab ? "3px solid blue" : "3px solid transparent",
-                fontWeight: activeTab === tab ? "bold" : "normal",
-                cursor: "pointer"
-              }}
-            >
-              {tab === "personal" && "Personal Info"}
-              {tab === "addresses" && "Addresses"}
-              {tab === "payments" && "Payment Methods"}
-              {tab === "settings" && "Settings"}
-            </button>
-          ))}
-        </div>
-
-        {/* Personal Info */}
-        {activeTab === "personal" && (
-          <div style={{ border: "1px solid #ddd", borderRadius: "8px", padding: "1rem" }}>
-            <h3 style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1rem" }}>
-              <User size={20} /> Personal Information
-            </h3>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
-              <div>
-                <label>Full Name</label>
-                <input type="text" value={personalInfo.name} onChange={(e)=>setPersonalInfo({...personalInfo,name:e.target.value})} style={{ width:"100%", padding:"0.5rem", border:"1px solid #ccc", borderRadius:"6px" }} />
-              </div>
-              <div>
-                <label>Email Address</label>
-                <input type="email" value={personalInfo.email} onChange={(e)=>setPersonalInfo({...personalInfo,email:e.target.value})} style={{ width:"100%", padding:"0.5rem", border:"1px solid #ccc", borderRadius:"6px" }} />
-              </div>
-              <div>
-                <label>Phone Number</label>
-                <input type="text" value={personalInfo.phone} onChange={(e)=>setPersonalInfo({...personalInfo,phone:e.target.value})} style={{ width:"100%", padding:"0.5rem", border:"1px solid #ccc", borderRadius:"6px" }} />
-              </div>
-            </div>
-            <div style={{ marginTop: "1rem" }}>
-              <label>Bio</label>
-              <textarea rows="3" value={personalInfo.bio} onChange={(e)=>setPersonalInfo({...personalInfo,bio:e.target.value})} style={{ width:"100%", padding:"0.5rem", border:"1px solid #ccc", borderRadius:"6px" }} />
-            </div>
-            <button onClick={updatePersonalInfo} style={{ marginTop:"1rem", background:"linear-gradient(to right, blue, orange)", color:"white", padding:"0.5rem 1rem", border:"none", borderRadius:"6px", cursor:"pointer" }}>
-              Save Changes
-            </button>
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-indigo-50 py-8 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto">
+        {/* Header */}
+        <div className="flex flex-col lg:flex-row lg:items-center gap-6 mb-8">
+          <div className="w-20 h-20 bg-gradient-to-r from-blue-600 to-blue-800 rounded-2xl flex items-center justify-center text-white font-bold text-2xl">
+            {userData.name.split(' ').map(n => n[0]).join('')}
           </div>
-        )}
+          <div className="flex-1">
+            <h1 className="text-3xl font-bold text-blue-900">{userData.name}</h1>
+            <p className="text-blue-600">Member since {new Date(userData.memberSince).toLocaleDateString()}</p>
+            <span className="inline-flex items-center bg-gradient-to-r from-blue-600 to-blue-800 text-white px-3 py-1 rounded-full text-sm font-medium mt-2">
+              <Star size={14} className="mr-1" />
+              VIP Customer
+            </span>
+          </div>
+          <button className="flex items-center gap-2 px-4 py-2 border border-blue-200 text-blue-700 rounded-xl hover:bg-blue-50 transition-colors">
+            <Edit size={16} />
+            Edit Profile Picture
+          </button>
+        </div>
 
-        {/* Addresses */}
-        {activeTab === "addresses" && (
-          <div>
-            <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:"1rem" }}>
-              <h3>Saved Addresses</h3>
-              <button style={{ background:"linear-gradient(to right, blue, orange)", color:"white", padding:"0.5rem 1rem", border:"none", borderRadius:"6px", cursor:"pointer" }}>
-                <Plus size={16} style={{ marginRight:"4px" }} />
-                Add New Address
+        <ProfileStats />
+
+        {/* Tabs */}
+        <div className="bg-white rounded-2xl shadow-lg border border-blue-100 overflow-hidden">
+          <div className="grid grid-cols-4 border-b border-blue-100">
+            {[
+              { id: "personal", label: "Personal Info", icon: User },
+              { id: "addresses", label: "Addresses", icon: MapPin },
+              { id: "payments", label: "Payments", icon: CreditCard },
+              { id: "settings", label: "Settings", icon: Settings }
+            ].map(({ id, label, icon: Icon }) => (
+              <button
+                key={id}
+                onClick={() => setActiveTab(id)}
+                className={`flex items-center justify-center gap-2 py-4 font-medium transition-colors ${activeTab === id
+                  ? "text-blue-700 border-b-2 border-blue-700"
+                  : "text-blue-600 hover:text-blue-700"
+                  }`}
+              >
+                <Icon size={18} />
+                {label}
               </button>
-            </div>
-            {addresses.map(address => (
-              <div key={address.id} style={{ border:"1px solid #ddd", borderRadius:"8px", padding:"1rem", marginBottom:"1rem" }}>
-                <div style={{ display:"flex", justifyContent:"space-between" }}>
-                  <div>
-                    <div style={{ display:"flex", gap:"0.5rem", alignItems:"center" }}>
-                      <h4>{address.type}</h4>
-                      {address.isDefault && <span style={{ background:"#eee", padding:"0.25rem 0.5rem", borderRadius:"4px" }}>Default</span>}
-                    </div>
-                    <p style={{ fontWeight:"500" }}>{address.name}</p>
-                    <p style={{ color:"#666" }}>{address.address}<br/>{address.city}, {address.state} {address.zipCode}<br/>{address.phone}</p>
-                  </div>
-                  <div style={{ display:"flex", gap:"0.5rem" }}>
-                    <button style={{ background:"none", border:"none", cursor:"pointer" }}><Edit size={14}/></button>
-                    <button style={{ background:"none", border:"none", cursor:"pointer" }}><Trash2 size={14}/></button>
-                  </div>
-                </div>
-              </div>
             ))}
           </div>
-        )}
 
-        {/* Payments */}
-        {activeTab === "payments" && (
-          <div>
-            <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:"1rem" }}>
-              <h3>Payment Methods</h3>
-              <button style={{ background:"linear-gradient(to right, blue, orange)", color:"white", padding:"0.5rem 1rem", border:"none", borderRadius:"6px", cursor:"pointer" }}>
-                <Plus size={16} style={{ marginRight:"4px" }} />
-                Add New Card
-              </button>
-            </div>
-            {paymentMethods.map(method => (
-              <div key={method.id} style={{ border:"1px solid #ddd", borderRadius:"8px", padding:"1rem", marginBottom:"1rem" }}>
-                <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center" }}>
-                  <div style={{ display:"flex", gap:"1rem", alignItems:"center" }}>
-                    <CreditCard size={32} style={{ color:"#666" }}/>
-                    <div>
-                      <div style={{ display:"flex", gap:"0.5rem", alignItems:"center" }}>
-                        <span>{method.type} •••• {method.last4}</span>
-                        {method.isDefault && <span style={{ background:"#eee", padding:"0.25rem 0.5rem", borderRadius:"4px" }}>Default</span>}
-                      </div>
-                      <p style={{ color:"#666" }}>Expires {method.expiry}</p>
-                    </div>
+          <div className="p-6">
+            {/* Personal Info */}
+            {activeTab === "personal" && (
+              <div className="space-y-6">
+                <h3 className="text-xl font-semibold text-blue-900 flex items-center gap-2">
+                  <User size={24} /> Personal Information
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-medium text-blue-700 mb-2">Full Name</label>
+                    <input
+                      type="text"
+                      value={personalInfo.name}
+                      onChange={(e) => setPersonalInfo({ ...personalInfo, name: e.target.value })}
+                      className="w-full px-4 py-3 border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    />
                   </div>
-                  <div style={{ display:"flex", gap:"0.5rem" }}>
-                    <button style={{ background:"none", border:"none", cursor:"pointer" }}><Edit size={14}/></button>
-                    <button style={{ background:"none", border:"none", cursor:"pointer" }}><Trash2 size={14}/></button>
+                  <div>
+                    <label className="block text-sm font-medium text-blue-700 mb-2">Email Address</label>
+                    <input
+                      type="email"
+                      value={personalInfo.email}
+                      onChange={(e) => setPersonalInfo({ ...personalInfo, email: e.target.value })}
+                      className="w-full px-4 py-3 border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-blue-700 mb-2">Phone Number</label>
+                    <input
+                      type="text"
+                      value={personalInfo.phone}
+                      onChange={(e) => setPersonalInfo({ ...personalInfo, phone: e.target.value })}
+                      className="w-full px-4 py-3 border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-blue-700 mb-2">CNIC</label>
+                    <input
+                      type="text"
+                      value={personalInfo.cnic}
+                      onChange={(e) => setPersonalInfo({ ...personalInfo, cnic: e.target.value })}
+                      placeholder="xxxxx-xxxxxxx-x"
+                      className="w-full px-4 py-3 border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    />
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* Settings */}
-        {activeTab === "settings" && (
-          <div style={{ display:"flex", flexDirection:"column", gap:"1rem" }}>
-            {/* Notifications */}
-            <div style={{ border:"1px solid #ddd", borderRadius:"8px", padding:"1rem" }}>
-              <h3 style={{ display:"flex", gap:"0.5rem", alignItems:"center", marginBottom:"1rem" }}>
-                <Bell size={20}/> Notification Preferences
-              </h3>
-              {Object.entries(notifications).map(([key,value])=>(
-                <div key={key} style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:"0.5rem" }}>
-                  <div>
-                    <label style={{ fontWeight:"500", textTransform:"capitalize" }}>{key.replace(/([A-Z])/g," $1")}</label>
-                  </div>
-                  <input 
-                    type="checkbox" 
-                    checked={value} 
-                    onChange={(e)=>setNotifications(prev=>({...prev,[key]:e.target.checked}))}
+                <div>
+                  <label className="block text-sm font-medium text-blue-700 mb-2">Bio</label>
+                  <textarea
+                    rows="3"
+                    value={personalInfo.bio}
+                    onChange={(e) => setPersonalInfo({ ...personalInfo, bio: e.target.value })}
+                    className="w-full px-4 py-3 border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
-              ))}
-            </div>
+                <button
+                  onClick={updatePersonalInfo}
+                  className="bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 text-white px-6 py-3 rounded-xl font-semibold transition-all shadow-md hover:shadow-lg"
+                >
+                  Save Changes
+                </button>
+              </div>
+            )}
 
-            {/* Security */}
-            <div style={{ border:"1px solid #ddd", borderRadius:"8px", padding:"1rem" }}>
-              <h3 style={{ display:"flex", gap:"0.5rem", alignItems:"center", marginBottom:"1rem" }}>
-                <Shield size={20}/> Security
-              </h3>
-              <button style={{ border:"1px solid #ccc", borderRadius:"6px", padding:"0.5rem 1rem", marginBottom:"0.5rem", cursor:"pointer", width:"100%", textAlign:"left" }}>Change Password</button>
-              <button style={{ border:"1px solid #ccc", borderRadius:"6px", padding:"0.5rem 1rem", marginBottom:"0.5rem", cursor:"pointer", width:"100%", textAlign:"left" }}>Enable Two-Factor Authentication</button>
-              <button style={{ border:"1px solid #ccc", borderRadius:"6px", padding:"0.5rem 1rem", marginBottom:"0.5rem", cursor:"pointer", width:"100%", textAlign:"left" }}>Download My Data</button>
-              <button style={{ border:"1px solid red", background:"red", color:"white", borderRadius:"6px", padding:"0.5rem 1rem", cursor:"pointer", width:"100%", textAlign:"left" }}>Delete Account</button>
-            </div>
+
+            {/* Addresses */}
+            {activeTab === "addresses" && (
+              <div className="space-y-6">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                  <h3 className="text-xl font-semibold text-blue-900">Saved Addresses</h3>
+                  <button className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-xl hover:from-blue-700 hover:to-blue-900 transition-all">
+                    <Plus size={16} />
+                    Add New Address
+                  </button>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {addresses.map(address => (
+                    <div key={address.id} className="bg-blue-50 rounded-xl p-5 border border-blue-200">
+                      <div className="flex justify-between items-start mb-4">
+                        <div className="flex items-center gap-2">
+                          <h4 className="font-semibold text-blue-900">{address.type}</h4>
+                          {address.isDefault && (
+                            <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">
+                              Default
+                            </span>
+                          )}
+                        </div>
+                        <div className="flex gap-2">
+                          <button className="p-1.5 rounded-lg hover:bg-blue-100 text-blue-600">
+                            <Edit size={16} />
+                          </button>
+                          <button className="p-1.5 rounded-lg hover:bg-blue-100 text-red-600">
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
+                      </div>
+                      <div className="space-y-2 text-blue-700">
+                        <p className="font-medium">{address.name}</p>
+                        <p>{address.address}</p>
+                        <p>{address.city}, {address.state} {address.zipCode}</p>
+                        <p>{address.phone}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Payments */}
+            {activeTab === "payments" && (
+              <div className="space-y-6">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                  <h3 className="text-xl font-semibold text-blue-900">Payment Method</h3>
+                </div>
+
+                <div className="grid grid-cols-1 gap-4">
+                  <div className="bg-blue-50 rounded-xl p-5 border border-blue-200">
+                    <div className="flex justify-between items-center">
+                      <div className="flex items-center gap-4">
+                        <CreditCard size={32} className="text-blue-600" />
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="font-semibold text-blue-900">
+                              Cash on Delivery
+                            </span>
+                            <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">
+                              Default
+                            </span>
+                          </div>
+                          <p className="text-blue-600">Pay when you receive your order</p>
+                        </div>
+                      </div>
+                      <div className="flex gap-2">
+                        <button className="p-1.5 rounded-lg hover:bg-blue-100 text-blue-600">
+                          <Edit size={16} />
+                        </button>
+                        <button className="p-1.5 rounded-lg hover:bg-blue-100 text-red-600">
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+
+            {/* Settings */}
+            {activeTab === "settings" && (
+              <div className="space-y-6">
+                {/* Notifications */}
+                <div className="bg-blue-50 rounded-xl p-6 border border-blue-200">
+                  <h3 className="text-xl font-semibold text-blue-900 flex items-center gap-2 mb-4">
+                    <Bell size={24} /> Notification Preferences
+                  </h3>
+                  <div className="space-y-4">
+                    {Object.entries(notifications).map(([key, value]) => (
+                      <div key={key} className="flex justify-between items-center">
+                        <label className="font-medium text-blue-700 capitalize">
+                          {key.replace(/([A-Z])/g, " $1")}
+                        </label>
+                        <div className="relative inline-block w-12 h-6">
+                          <input
+                            type="checkbox"
+                            checked={value}
+                            onChange={(e) => setNotifications(prev => ({ ...prev, [key]: e.target.checked }))}
+                            className="sr-only"
+                          />
+                          <div className={`w-12 h-6 rounded-full transition-colors ${value ? 'bg-blue-600' : 'bg-gray-300'
+                            }`} />
+                          <div className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-white transition-transform ${value ? 'transform translate-x-6' : ''
+                            }`} />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Security */}
+                <div className="bg-blue-50 rounded-xl p-6 border border-blue-200">
+                  <h3 className="text-xl font-semibold text-blue-900 flex items-center gap-2 mb-4">
+                    <Shield size={24} /> Security
+                  </h3>
+                  <div className="space-y-3">
+                    <button className="w-full flex items-center gap-3 px-4 py-3 bg-white border border-blue-200 text-blue-700 rounded-xl hover:bg-blue-50 transition-colors">
+                      <Key size={18} />
+                      Change Password
+                    </button>
+                    <button className="w-full flex items-center gap-3 px-4 py-3 bg-white border border-blue-200 text-blue-700 rounded-xl hover:bg-blue-50 transition-colors">
+                      <Lock size={18} />
+                      Enable Two-Factor Authentication
+                    </button>
+                    <button className="w-full flex items-center gap-3 px-4 py-3 bg-white border border-blue-200 text-blue-700 rounded-xl hover:bg-blue-50 transition-colors">
+                      <Download size={18} />
+                      Download My Data
+                    </button>
+                    <button className="w-full flex items-center gap-3 px-4 py-3 bg-red-100 border border-red-200 text-red-700 rounded-xl hover:bg-red-200 transition-colors">
+                      <Trash2 size={18} />
+                      Delete Account
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
-        )}
+        </div>
       </div>
     </div>
   )
 }
+
+// Settings icon component
+const Settings = ({ size = 24, className = "" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" className={className}>
+    <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
+    <circle cx="12" cy="12" r="3" />
+  </svg>
+)
