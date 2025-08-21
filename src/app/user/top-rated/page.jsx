@@ -1,56 +1,74 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Star, ChevronRight, ShoppingCart, Shield, Truck, Zap, TrendingUp, Heart } from "lucide-react";
+import { Star, ChevronRight, ShoppingCart, Shield, Truck, Zap, TrendingUp, Heart, Eye, Clock, Award, Crown } from "lucide-react";
 
-function ProductCard({ product }) {
+function ProductCard({ product, index }) {
   const [isLiked, setIsLiked] = useState(false);
 
   return (
-    <div className="group relative bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 hover:border-gray-200">
+    <div className="group relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 border border-blue-100">
       <div className="relative aspect-square overflow-hidden">
         <img
           src={product.image}
           alt={product.name}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
         />
-        <div className="absolute top-3 left-3 flex gap-2">
+        <div className="absolute top-4 left-4 flex flex-col gap-2">
+          {index < 3 && (
+            <div className="bg-gradient-to-r from-orange-500 to-red-500 text-white text-xs font-bold px-3 py-2 rounded-xl shadow-lg flex items-center gap-1">
+              <Crown size={14} className="fill-white" />
+              #{index + 1} TOP
+            </div>
+          )}
           {product.isNew && (
-            <div className="bg-green-500 text-white text-xs font-bold px-2.5 py-1 rounded-full">
+            <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white text-xs font-bold px-3 py-2 rounded-xl shadow-lg">
               NEW
             </div>
           )}
           {product.discount && (
-            <div className="bg-red-500 text-white text-xs font-bold px-2.5 py-1 rounded-full">
+            <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white text-xs font-bold px-3 py-2 rounded-xl shadow-lg">
               -{product.discount}%
             </div>
           )}
         </div>
-        <div className="absolute top-3 right-3 flex flex-col gap-2">
+        <div className="absolute top-4 right-4 flex flex-col gap-2">
           <button 
             onClick={() => setIsLiked(!isLiked)}
-            className="bg-white/90 hover:bg-white p-2 rounded-full shadow-md transition-all hover:scale-110"
+            className="bg-white/90 hover:bg-white p-2.5 rounded-xl shadow-md transition-all hover:scale-110"
           >
             <Heart 
               size={18} 
               fill={isLiked ? "#ef4444" : "none"} 
-              className={isLiked ? "text-red-500" : "text-gray-700"}
+              className={isLiked ? "text-red-500" : "text-blue-700"}
             />
           </button>
-          <button className="bg-white/90 hover:bg-white p-2 rounded-full shadow-md transition-all hover:scale-110">
-            <ShoppingCart className="w-[18px] h-[18px] text-gray-700" />
+          <button className="bg-white/90 hover:bg-white p-2.5 rounded-xl shadow-md transition-all hover:scale-110">
+            <ShoppingCart className="w-[18px] h-[18px] text-blue-700" />
           </button>
         </div>
+        {product.isHot && (
+          <div className="absolute bottom-4 left-4 bg-gradient-to-r from-red-500 to-orange-500 text-white text-xs font-bold px-3 py-2 rounded-xl flex items-center gap-1">
+            <Clock size={12} />
+            12:45:33
+          </div>
+        )}
       </div>
       
       <div className="p-5">
-        <div className="flex justify-between items-start mb-2">
+        <div className="flex justify-between items-start mb-3">
           <div>
-            <h3 className="font-semibold text-gray-900 line-clamp-1">{product.name}</h3>
-            <p className="text-xs text-gray-500 mt-1">{product.category}</p>
+            <span className="text-xs font-medium text-blue-600 uppercase tracking-wider bg-blue-50 px-2 py-1 rounded-md">
+              {product.category}
+            </span>
+            <h3 className="font-semibold text-blue-900 text-lg line-clamp-2 mt-2 group-hover:text-blue-700 transition-colors">
+              {product.name}
+            </h3>
           </div>
           {product.isBestSeller && (
-            <span className="bg-amber-100 text-amber-800 text-xs px-2.5 py-1 rounded-full">Bestseller</span>
+            <span className="bg-gradient-to-r from-amber-400 to-orange-500 text-white text-xs px-3 py-1.5 rounded-xl shadow-sm">
+              Bestseller
+            </span>
           )}
         </div>
 
@@ -65,14 +83,19 @@ function ProductCard({ product }) {
               />
             ))}
           </div>
-          <span className="text-xs text-gray-500 ml-1">({product.reviewCount.toLocaleString()})</span>
+          <span className="text-sm text-blue-600 ml-1">({product.reviewCount.toLocaleString()})</span>
         </div>
 
-        <div className="flex items-center gap-2">
-          <span className="font-bold text-gray-900 text-lg">${product.price.toFixed(2)}</span>
-          {product.originalPrice && (
-            <span className="text-sm text-gray-400 line-through">${product.originalPrice.toFixed(2)}</span>
-          )}
+        <div className="flex items-center justify-between">
+          <div className="flex items-baseline gap-2">
+            <span className="font-bold text-blue-900 text-xl">${product.price.toFixed(2)}</span>
+            {product.originalPrice && (
+              <span className="text-sm text-gray-400 line-through">${product.originalPrice.toFixed(2)}</span>
+            )}
+          </div>
+          <button className="p-3 rounded-xl bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 transition-all shadow-md hover:shadow-lg">
+            <ShoppingCart className="w-5 h-5 text-white" />
+          </button>
         </div>
       </div>
     </div>
@@ -85,7 +108,6 @@ export default function TopRatedPage() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate API fetch
     const fetchProducts = () => {
       setIsLoading(true);
       setTimeout(() => {
@@ -101,7 +123,8 @@ export default function TopRatedPage() {
             image: "/phone.jpeg",
             isBestSeller: true,
             discount: 8,
-            isNew: false
+            isNew: false,
+            isHot: true
           },
           { 
             id: 2, 
@@ -114,7 +137,8 @@ export default function TopRatedPage() {
             image: "/nikeshoes.jpeg",
             isBestSeller: true,
             discount: 10,
-            isNew: true
+            isNew: true,
+            isHot: true
           },
           { 
             id: 3, 
@@ -203,133 +227,139 @@ export default function TopRatedPage() {
       ? products.filter(p => p.isNew)
       : activeFilter === "bestsellers"
         ? products.filter(p => p.isBestSeller)
-        : products.filter(p => p.category.toLowerCase() === activeFilter);
+        : activeFilter === "hot"
+          ? products.filter(p => p.isHot)
+          : products.filter(p => p.category.toLowerCase() === activeFilter);
 
   const categories = [
-    { id: "all", name: "All Products" },
-    { id: "electronics", name: "Electronics" },
-    { id: "fashion", name: "Fashion" },
-    { id: "home & kitchen", name: "Home & Kitchen" },
-    { id: "gaming", name: "Gaming" },
-    { id: "new", name: "New Arrivals" },
-    { id: "bestsellers", name: "Bestsellers" }
+    { id: "all", name: "All Products", icon: "🌟" },
+    { id: "electronics", name: "Electronics", icon: "📱" },
+    { id: "fashion", name: "Fashion", icon: "👕" },
+    { id: "home & kitchen", name: "Home & Kitchen", icon: "🏠" },
+    { id: "gaming", name: "Gaming", icon: "🎮" },
+    { id: "new", name: "New Arrivals", icon: "🆕" },
+    { id: "bestsellers", name: "Bestsellers", icon: "🏆" },
+    { id: "hot", name: "Hot Deals", icon: "🔥" }
   ];
 
   const stats = [
-    { label: "Total Products", value: "10,000+", icon: TrendingUp, color: "text-blue-500" },
-    { label: "Happy Customers", value: "250,000+", icon: Star, color: "text-amber-500" },
-    { label: "Fast Delivery", value: "24-48h", icon: Truck, color: "text-emerald-500" },
-    { label: "Secure Payments", value: "100% Safe", icon: Shield, color: "text-violet-500" }
+    { label: "Total Products", value: "10,000+", icon: TrendingUp, color: "text-blue-500", bg: "bg-blue-50" },
+    { label: "Happy Customers", value: "250,000+", icon: Star, color: "text-amber-500", bg: "bg-amber-50" },
+    { label: "Fast Delivery", value: "24-48h", icon: Truck, color: "text-emerald-500", bg: "bg-emerald-50" },
+    { label: "Secure Payments", value: "100% Safe", icon: Shield, color: "text-violet-500", bg: "bg-violet-50" }
   ];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      {/* Hero Section */}
-      <div className="mb-16 text-center">
-        <div className="inline-flex items-center bg-gradient-to-r from-amber-400 to-orange-500 text-white text-sm font-medium px-4 py-1.5 rounded-full mb-4">
-          <Zap size={16} className="mr-1" fill="white" />
-          TOP RATED COLLECTION
-        </div>
-        <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-          Curated Excellence
-        </h1>
-        <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-          Discover our highest rated products loved by thousands of customers worldwide
-        </p>
-      </div>
-
-      {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
-        {stats.map((stat, index) => (
-          <div key={index} className="bg-white p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow border border-gray-100">
-            <div className={`${stat.color} mb-4`}>
-              <stat.icon size={32} className="inline" />
-            </div>
-            <div className="text-2xl font-bold text-gray-900 mb-1">{stat.value}</div>
-            <div className="text-sm text-gray-500 font-medium">{stat.label}</div>
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-indigo-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
+        {/* Hero Section */}
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center bg-gradient-to-r from-blue-600 to-blue-800 text-white text-sm font-bold px-5 py-2 rounded-full mb-6">
+            <Award size={18} className="mr-2" />
+            TOP RATED COLLECTION
           </div>
-        ))}
-      </div>
-
-      {/* Filters */}
-      <div className="mb-10">
-        <div className="flex flex-wrap gap-3">
-          {categories.map(category => (
-            <button
-              key={category.id}
-              onClick={() => setActiveFilter(category.id)}
-              className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200 ${
-                activeFilter === category.id
-                  ? "bg-gray-900 text-white shadow-md"
-                  : "bg-white text-gray-700 hover:bg-gray-50 border border-gray-200"
-              }`}
-            >
-              {category.name}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Products Grid */}
-      {isLoading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-16">
-          {[...Array(8)].map((_, index) => (
-            <div key={index} className="bg-gray-100 rounded-2xl aspect-[3/4] animate-pulse"></div>
-          ))}
-        </div>
-      ) : (
-        <>
-          {filteredProducts.length === 0 ? (
-            <div className="text-center py-16">
-              <div className="bg-gray-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Star size={32} className="text-gray-400" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">No products found</h3>
-              <p className="text-gray-500 max-w-md mx-auto">
-                Try adjusting your filters or browse our full collection
-              </p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-16">
-              {filteredProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
-            </div>
-          )}
-        </>
-      )}
-
-      {/* CTA Section */}
-      <div className="relative bg-gradient-to-r from-blue-600 to-indigo-700 rounded-3xl p-10 text-white mb-16 overflow-hidden">
-        <div className="absolute -right-20 -top-20 w-64 h-64 bg-blue-500/20 rounded-full"></div>
-        <div className="absolute -left-20 -bottom-20 w-64 h-64 bg-indigo-500/20 rounded-full"></div>
-        
-        <div className="relative max-w-3xl mx-auto text-center">
-          <div className="inline-flex items-center justify-center bg-white/20 p-3 rounded-full mb-6">
-            <Zap size={24} fill="white" />
-          </div>
-          <h2 className="text-3xl font-bold mb-4">Get Exclusive Deals</h2>
-          <p className="text-blue-100 mb-8 text-lg">
-            Subscribe to our newsletter and get 15% off your first order plus access to exclusive deals
+          <h1 className="text-4xl md:text-5xl font-bold text-blue-900 mb-4">
+            Curated Excellence
+          </h1>
+          <p className="text-lg text-blue-700 max-w-2xl mx-auto">
+            Discover our highest rated products loved by thousands of customers worldwide
           </p>
-          <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-            <input 
-              type="email" 
-              placeholder="Your email address" 
-              className="flex-grow px-5 py-3.5 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <button className="bg-amber-400 hover:bg-amber-500 text-gray-900 font-semibold px-6 py-3.5 rounded-lg transition-colors shadow-md hover:shadow-lg">
-              Subscribe
-            </button>
+        </div>
+
+        {/* Stats */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
+          {stats.map((stat, index) => (
+            <div key={index} className="bg-white p-6 rounded-2xl shadow-lg border border-blue-100 hover:shadow-xl transition">
+              <div className={`${stat.bg} w-12 h-12 rounded-xl flex items-center justify-center mb-4`}>
+                <stat.icon size={24} className={stat.color} />
+              </div>
+              <div className="text-2xl font-bold text-blue-900 mb-1">{stat.value}</div>
+              <div className="text-sm text-blue-600 font-medium">{stat.label}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* Filters */}
+        <div className="mb-12">
+          <div className="flex flex-wrap gap-3 justify-center">
+            {categories.map(category => (
+              <button
+                key={category.id}
+                onClick={() => setActiveFilter(category.id)}
+                className={`flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${
+                  activeFilter === category.id
+                    ? "bg-gradient-to-r from-blue-600 to-blue-800 text-white shadow-lg"
+                    : "bg-white text-blue-700 hover:bg-blue-50 border border-blue-200 shadow-sm hover:shadow-md"
+                }`}
+              >
+                <span className="text-lg">{category.icon}</span>
+                {category.name}
+              </button>
+            ))}
           </div>
         </div>
-      </div>
 
-      {/* View All Button */}
-      <div className="text-center">
-        <button className="inline-flex items-center px-6 py-3.5 border border-gray-300 rounded-lg bg-white text-gray-700 font-medium hover:bg-gray-50 transition-colors shadow-sm hover:shadow-md">
-          View All Products <ChevronRight className="ml-2" size={18} />
-        </button>
+        {/* Products Grid */}
+        {isLoading ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 mb-16">
+            {[...Array(8)].map((_, index) => (
+              <div key={index} className="bg-blue-100 rounded-2xl aspect-[3/4] animate-pulse"></div>
+            ))}
+          </div>
+        ) : (
+          <>
+            {filteredProducts.length === 0 ? (
+              <div className="text-center py-16 bg-white rounded-2xl shadow-lg border border-blue-100">
+                <div className="w-20 h-20 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <Star size={32} className="text-blue-400" />
+                </div>
+                <h3 className="text-xl font-semibold text-blue-900 mb-2">No products found</h3>
+                <p className="text-blue-600 max-w-md mx-auto">
+                  Try adjusting your filters or browse our full collection
+                </p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 mb-16">
+                {filteredProducts.map((product, index) => (
+                  <ProductCard key={product.id} product={product} index={index} />
+                ))}
+              </div>
+            )}
+          </>
+        )}
+
+        {/* CTA Section */}
+        <div className="relative bg-gradient-to-r from-blue-600 to-indigo-700 rounded-3xl p-12 text-white mb-16 overflow-hidden shadow-2xl">
+          <div className="absolute -right-20 -top-20 w-64 h-64 bg-white/10 rounded-full"></div>
+          <div className="absolute -left-20 -bottom-20 w-64 h-64 bg-white/10 rounded-full"></div>
+          
+          <div className="relative max-w-3xl mx-auto text-center">
+            <div className="inline-flex items-center justify-center bg-white/20 p-4 rounded-2xl mb-6">
+              <Zap size={28} className="text-white" />
+            </div>
+            <h2 className="text-3xl font-bold mb-4">Get Exclusive Deals</h2>
+            <p className="text-blue-100 mb-8 text-lg">
+              Subscribe to our newsletter and get 15% off your first order plus access to exclusive deals
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+              <input 
+                type="email" 
+                placeholder="Your email address" 
+                className="flex-grow px-5 py-4 rounded-xl text-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm"
+              />
+              <button className="bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 text-blue-900 font-bold px-6 py-4 rounded-xl transition-all shadow-lg hover:shadow-xl">
+                Subscribe
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* View All Button */}
+        <div className="text-center">
+          <button className="inline-flex items-center px-6 py-4 bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-xl font-bold hover:from-blue-700 hover:to-blue-900 transition-all shadow-lg hover:shadow-xl">
+            View All Products <ChevronRight className="ml-2" size={20} />
+          </button>
+        </div>
       </div>
     </div>
   );
